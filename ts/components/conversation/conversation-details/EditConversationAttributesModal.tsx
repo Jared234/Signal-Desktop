@@ -42,6 +42,7 @@ type PropsType = {
   replaceAvatar: ReplaceAvatarActionType;
   saveAvatarToDisk: SaveAvatarToDiskActionType;
   userAvatarData: Array<AvatarDataType>;
+  isEditingAvatar?: boolean;
 };
 
 export const EditConversationAttributesModal: FunctionComponent<PropsType> = ({
@@ -59,6 +60,7 @@ export const EditConversationAttributesModal: FunctionComponent<PropsType> = ({
   replaceAvatar,
   saveAvatarToDisk,
   userAvatarData,
+  isEditingAvatar,
 }) => {
   const focusDescriptionRef = useRef<undefined | boolean>(
     initiallyFocusDescription
@@ -68,7 +70,7 @@ export const EditConversationAttributesModal: FunctionComponent<PropsType> = ({
   const startingTitleRef = useRef<string>(externalTitle);
   const startingAvatarPathRef = useRef<undefined | string>(externalAvatarPath);
 
-  const [editingAvatar, setEditingAvatar] = useState(false);
+  const [editingAvatar, setEditingAvatar] = useState(isEditingAvatar);
   const [avatar, setAvatar] = useState<undefined | Uint8Array>();
   const [rawTitle, setRawTitle] = useState(externalTitle);
   const [rawGroupDescription, setRawGroupDescription] = useState(

@@ -241,6 +241,15 @@ export const Avatar: FunctionComponent<Props> = ({
     contents = (
       <button className={contentsClassName} type="button" onClick={onClick}>
         {contentsChildren}
+        <button className={contentsClassName} type="button" onClick={onClick}>
+          <div className="module-Avatar__spinner-container">
+            <Spinner
+                size={`${size - 20}px`}
+                svgSize="small"
+                direction="on-avatar"
+            />
+          </div>
+        </button>
       </button>
     );
   } else {

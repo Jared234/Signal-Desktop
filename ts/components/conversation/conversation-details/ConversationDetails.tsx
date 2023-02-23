@@ -50,6 +50,7 @@ enum ModalState {
   NothingOpen,
   EditingGroupDescription,
   EditingGroupTitle,
+  EditingGroupAvatar,
   AddingGroupMembers,
   MuteNotifications,
   UnmuteNotifications,
@@ -181,6 +182,7 @@ export const ConversationDetails: React.ComponentType<Props> = ({
   const cannotLeaveBecauseYouAreLastAdmin =
     isAdmin && !isJustMe && !isAnyoneElseAnAdmin;
 
+  let isEditingAvatar = false;
   let modalNode: ReactNode;
   switch (modalState) {
     case ModalState.NothingOpen:
@@ -227,6 +229,50 @@ export const ConversationDetails: React.ComponentType<Props> = ({
           replaceAvatar={replaceAvatar}
           saveAvatarToDisk={saveAvatarToDisk}
           userAvatarData={userAvatarData}
+          isEditingAvatar={isEditingAvatar}
+        />
+      );
+      break;
+    case ModalState.EditingGroupAvatar:
+      isEditingAvatar = true;
+      modalNode = (
+          <EditConversationAttributesModal
+              avatarColor={conversation.color}
+              avatarPath={conversation.avatarPath}
+              conversationId={conversation.id}
+              groupDescription={conversation.groupDescription}
+              i18n={i18n}
+              initiallyFocusDescription
+              makeRequest={async (
+                  options: Readonly<{
+                    avatar?: undefined | Uint8Array;
+                    description?: string;
+                    title?: string;
+                  }>
+              ) => {
+                setEditGroupAttributesRequestState(RequestState.Active);
+
+                try {
+                  await updateGroupAttributes(options);
+                  setModalState(ModalState.NothingOpen);
+                  setEditGroupAttributesRequestState(RequestState.Inactive);
+                } catch (err) {
+                  setEditGroupAttributesRequestState(
+                      RequestState.InactiveWithError
+                  );
+                }
+              }}
+              onClose={() => {
+                setModalState(ModalState.NothingOpen);
+                setEditGroupAttributesRequestState(RequestState.Inactive);
+              }}
+              requestState={editGroupAttributesRequestState}
+              title={conversation.title}
+              deleteAvatarFromDisk={deleteAvatarFromDisk}
+              replaceAvatar={replaceAvatar}
+              saveAvatarToDisk={saveAvatarToDisk}
+              userAvatarData={userAvatarData}
+              isEditingAvatar={isEditingAvatar}
         />
       );
       break;
@@ -324,6 +370,11 @@ export const ConversationDetails: React.ComponentType<Props> = ({
               ? ModalState.EditingGroupTitle
               : ModalState.EditingGroupDescription
           );
+        }}
+        startEditingGroupAvatar={(isAllowed: boolean) => {
+          if (isAllowed) {
+            setModalState(ModalState.EditingGroupAvatar);
+          }
         }}
         theme={theme}
       />

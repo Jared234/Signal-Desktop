@@ -26,7 +26,9 @@ export type Props = {
   isMe: boolean;
   memberships: Array<GroupV2Membership>;
   startEditing: (isGroupTitle: boolean) => void;
+  startEditingGroupAvatar?: (isAllowed: boolean) => void;
   theme: ThemeType;
+  onClose?: () => void;
 };
 
 enum ConversationDetailsHeaderActiveModal {
@@ -47,6 +49,8 @@ export const ConversationDetailsHeader: React.ComponentType<Props> = ({
   memberships,
   startEditing,
   theme,
+  startEditingGroupAvatar,
+  onClose,
 }) => {
   const [activeModal, setActiveModal] = useState<
     undefined | ConversationDetailsHeaderActiveModal
@@ -121,8 +125,10 @@ export const ConversationDetailsHeader: React.ComponentType<Props> = ({
           conversationTitle={conversation.title}
           i18n={i18n}
           isGroup={isGroup}
+          onClick={() => startEditingGroupAvatar?.(true)}
           onClose={() => {
             setActiveModal(undefined);
+            onClose?.();
           }}
         />
       );

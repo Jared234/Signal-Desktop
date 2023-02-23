@@ -14,6 +14,7 @@ export type PropsType = {
   conversationTitle?: string;
   i18n: LocalizerType;
   isGroup?: boolean;
+  onClick?: () => unknown;
   onClose: () => unknown;
 };
 
@@ -24,6 +25,7 @@ export const AvatarLightbox = ({
   i18n,
   isGroup,
   onClose,
+  onClick,
 }: PropsType): JSX.Element => {
   return (
     <Lightbox close={onClose} i18n={i18n} media={[]}>
@@ -33,6 +35,8 @@ export const AvatarLightbox = ({
         conversationTitle={conversationTitle}
         i18n={i18n}
         isGroup={isGroup}
+        isEditable
+        onClick={onClick}
         style={{
           fontSize: '16em',
           height: '2em',

@@ -136,6 +136,8 @@ export const AvatarPreview = ({
         tabIndex: 0,
         onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => {
           if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            event.stopPropagation();
             onClick();
           }
         },
